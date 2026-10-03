@@ -12,6 +12,7 @@ channels = {extras = ["daphne"], version = "*"}
 channels-redis = "*"
 drf-nested-routers = "*"
 djoser = "*"
+whitenoise = "*"
 
 [dev-packages]
 

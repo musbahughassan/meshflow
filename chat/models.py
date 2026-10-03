@@ -34,4 +34,5 @@ class Message(models.Model):
         ordering = ['created_at']
 
     def __str__(self):
-        return f"Message from {self.sender.username}: {self.content[:30]}"
+        preview = str(self.content)[:30] if self.content else ''
+        return f"Message from {self.sender.username}: {preview}"
