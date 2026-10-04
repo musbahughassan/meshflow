@@ -116,24 +116,14 @@ CHANNEL_LAYERS = {
         "CONFIG": {
             "hosts": [
                 {
-                    "address": "redis://127.0.0.1:6379/2",
-                    "socket_timeout": 20,          # Keeps the socket connection alive longer
+                    "address": "redis://127.0.0.1:6380/2",
+                    "socket_timeout": 20,     # Keeps the socket connection alive longer
                     "socket_connect_timeout": 5,
                 }
             ],
         },
     },
 }
-
-
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": ["redis://127.0.0.1:6379/2"],
-#         },
-#     },
-# }
 
 
 # Database

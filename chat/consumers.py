@@ -6,23 +6,25 @@ from . models import Room, Message, Membership
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        
         self.room_id = self.scope['url_route']['kwargs']['room_id']
         self.room_group_name = f'chat_{self.room_id}'
         self.user = self.scope['user']
 
-
+    
         if not self.user.is_authenticated:
             await self.close(code=4001)
             return
 
-        is_number = await self.check_membership()
-        if not is_number:
+        is_member = await self.check_membership()
+        if not is_member:
             await self.close(code=4003)
             return
 
 
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
+
 
 
     async def disconnect(self, close_code):
@@ -63,7 +65,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def save_message(self, content):
-        print(f"DEBUG content type: {type(content)}, value: {content!r}")
         room = Room.objects.get(id=self.room_id)
         return Message.objects.create(room=room, sender=self.user, content=content)
   
