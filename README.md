@@ -4,7 +4,7 @@ A real-time chat API built with Django, Django REST Framework, and Django Channe
 
 ## Features
 
-- **User authentication** — signup, login, logout via JWT
+- **User authentication** — register, login, logout via JWT
 - **Chat rooms with membership** — create rooms, add members by username; only room members can read or participate
 - **Real-time messaging** — WebSocket-based, authenticated, broadcast to all connected members of a room
 - **Message history** — persisted to Postgres, retrievable over REST, read-only (messages are created only via WebSocket)
@@ -90,7 +90,8 @@ All REST endpoints are prefixed with `/chat/` or `/auth/` (adjust to match your 
 
 | Method | Endpoint | Description | Auth required |
 |--------|----------|--------------|----------------|
-| POST | `/auth/signup/` | Create a new user account | No |
+| POST | `/auth/register/` | Create a new user account | No |
+| GET  | `/auth/register/me| retrieve the current user
 | POST | `/auth/login/` | Log in, returns `access` + `refresh` tokens | No |
 | POST | `/auth/login/refresh/` | Exchange refresh token for new access token | No |
 | POST | `/auth/logout/` | Blacklist a refresh token | Yes |
@@ -123,7 +124,7 @@ ws://<host>/ws/chat/{room_id}/?token=<access_token>
 
 MeshFlow uses JWT for both REST and WebSocket authentication:
 
-1. **Signup / Login** — same as a standard JWT flow; login returns `access` and `refresh` tokens.
+1. **register / Login** — same as a standard JWT flow; login returns `access` and `refresh` tokens.
 2. **REST requests** — send the access token in the `Authorization` header:
    ```
    Authorization: Bearer <access_token>
@@ -181,23 +182,6 @@ MeshFlow is deployed on **AWS Lightsail** (Ubuntu 22.04), containerized with Doc
 - `nginx` is the only service exposed to the internet (port 80); it reverse-proxies both regular HTTP traffic and WebSocket connections to `web`
 - `db` and `redis` are only reachable from other containers on the Docker network, never exposed externally
 
-### Why Lightsail
-
-Chosen over raw EC2 for simplicity: flat monthly pricing, a static public IP included by default, and a simpler firewall UI — while still being a real Linux box, so the same Docker Compose setup that runs locally runs identically on the server.
-
-### Key deployment details
-
-- **Static files and migrations run at container *startup*, not build time** (`entrypoint.sh`), since environment variables from `.env` are only available once the container is running — not during `docker build`.
-- **nginx requires explicit WebSocket upgrade headers** (`proxy_set_header Upgrade $http_upgrade;` / `Connection "upgrade";`) on the `/ws/` location block — without these, nginx treats WebSocket connection attempts as plain HTTP and they fail.
-- **Service names, not `localhost`, are used for inter-container communication** — e.g. `DB_HOST=db` and `redis://redis:6379/2` in `CHANNEL_LAYERS`, matching the service names in `docker-compose.yml`.
-- **Verified in production** with a real multi-client test: two separate WebSocket connections (different users, different devices) exchanging messages live over the public IP, with message history matching between the WebSocket stream and the REST `/messages/` endpoint afterward.
-
-### Redeploying after a code change
-
-```bash
-git pull
-docker compose up -d --build
-```
 
 ### Known deployment gaps
 
@@ -215,4 +199,4 @@ docker compose up -d --build
 
 ## Author
 
-Built by [your name] as a real-time systems project, extending the REST API patterns from an earlier project (Inkwell) with WebSocket-based real-time features via Django Channels.
+Built by [Musbahu G. Hassan] as a real-time systems project, REST API with WebSocket-based real-time features via Django Channels.
