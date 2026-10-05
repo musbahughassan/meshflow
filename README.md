@@ -1,4 +1,6 @@
-# MeshFlow 💬
+# MeshFlow 💬 
+
+Live Demo: http://3.10.143.187/auth/register/
 
 A real-time chat API built with Django, Django REST Framework, and Django Channels. Users can create chat rooms, add members, and exchange messages in real time over WebSockets, with full message history available over REST.
 
