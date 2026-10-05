@@ -25,9 +25,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.environ.get('DEBUG') == 'True':
-    DEBUG = True
-
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 
 # Application definition
@@ -112,37 +109,20 @@ WSGI_APPLICATION = 'meshflow.wsgi.application'
 
 ASGI_APPLICATION = 'meshflow.asgi.application'
 
-if os.environ.get("DEBUG") == False:
-
-    CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [
-                {
-                    "address": "redis://redis:6379/2", # use default redis 6379 port when dockerizing.
-                    "socket_timeout": 20,     # Keeps the socket connection alive longer
-                    "socket_connect_timeout": 5,
-                }
-            ],
-        },
+CHANNEL_LAYERS = {
+"default": {
+    "BACKEND": "channels_redis.core.RedisChannelLayer",
+    "CONFIG": {
+        "hosts": [
+            {
+                "address": "redis://localhost:6379/2", 
+                "socket_timeout": 20,     # Keeps the socket connection alive longer
+                "socket_connect_timeout": 5,
+            }
+        ],
     },
-    }
-else:
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "channels_redis.core.RedisChannelLayer",
-            "CONFIG": {
-                "hosts": [
-                    {
-                        "address": "redis://localhost:6379/2", # use default redis 6379 port when dockerizing.
-                        "socket_timeout": 20,     # Keeps the socket connection alive longer
-                        "socket_connect_timeout": 5,
-                    }
-                ],
-            },
-        },
-        }
+},
+}
 
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
