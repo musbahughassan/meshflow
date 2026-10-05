@@ -118,7 +118,7 @@ CHANNEL_LAYERS = {
         "CONFIG": {
             "hosts": [
                 {
-                    "address": "redis://redis:6380/2",
+                    "address": "redis://redis:6379/2",
                     "socket_timeout": 20,     # Keeps the socket connection alive longer
                     "socket_connect_timeout": 5,
                 }
@@ -178,7 +178,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
