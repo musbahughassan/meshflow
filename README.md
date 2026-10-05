@@ -81,6 +81,13 @@ WebSockets require an ASGI server — the regular `runserver` won't serve them:
 ```bash
 daphne meshflow.asgi:application
 ```
+## Run with Docker
+
+first in your .env and /meshflow settings.py file use service(DB_HOST="db", for CHANNEL_LAYER "address":redis ) name not localhost 
+
+```bash
+docker compose up -d --build
+```
 
 ## API Endpoints
 
@@ -109,9 +116,13 @@ All REST endpoints are prefixed with `/chat/` or `/auth/` (adjust to match your 
 ### WebSocket
 
 ```
-ws://<host>/ws/chat/{room_id}/?token=<access_token>
+ws://<host:port>/ws/chat/{room_id}/?token=<access_token>
 ```
 
+### WebSocket on Docker no port number
+```
+ws://<host:>/ws/chat/{room_id}/?token=<access_token>
+```
 - Authenticates the connection using the JWT access token passed as a query parameter
 - Rejects the connection if the user isn't authenticated (`4001`) or isn't a member of the room (`4003`)
 - **Send:** `{"content": "your message"}`
@@ -127,7 +138,7 @@ MeshFlow uses JWT for both REST and WebSocket authentication:
 1. **register / Login** — same as a standard JWT flow; login returns `access` and `refresh` tokens.
 2. **REST requests** — send the access token in the `Authorization` header:
    ```
-   Authorization: Bearer <access_token>
+   Authorization: JWT <access_token>
    ```
 3. **WebSocket connections** — since WebSocket handshakes can't carry custom headers the way HTTP can, the access token is passed as a query parameter instead:
    ```
