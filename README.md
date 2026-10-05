@@ -212,4 +212,4 @@ MeshFlow is deployed on **AWS Lightsail** (Ubuntu 22.04), containerized with Doc
 
 ## Author
 
-Built by [Musbahu G. Hassan] as a real-time systems project, REST API with WebSocket-based real-time features via Django Channels.
+Built by [Musbahu G. Hassan] as a real-time Chat API systems project, REST API with WebSocket-based real-time features via Django Channels.
